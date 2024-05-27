@@ -8,6 +8,7 @@ ASTD-UIAS is meant to provide players with useful information regarding their fa
 Dependencies
 ====
 Python 3.11(+)
+
 requirements.txt
 
 Installation
