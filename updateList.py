@@ -5,9 +5,10 @@ import requests as rq
 start = time.time()  # stopwatch
 
 links = []
+pre = 'https://allstartd.fandom.com'
 
 
-def fiveStar():  # needs to access all relavent unit links
+def fiveStar():  # needs to access all relevant unit links
     source: bytes = rq.get(
         "https://allstartd.fandom.com/wiki/5_Star_Units").content
     soup = bs(source, 'html5lib')
@@ -16,7 +17,7 @@ def fiveStar():  # needs to access all relavent unit links
             links.append(href.get('href'))
 
 
-def sixStar():  # needs to access all relavent unit links
+def sixStar():  # needs to access all relevant unit links
     source: bytes = rq.get(
         "https://allstartd.fandom.com/wiki/6_Star_Units").content
     soup = bs(source, 'html5lib')
@@ -25,7 +26,7 @@ def sixStar():  # needs to access all relavent unit links
             links.append(href.get('href'))
 
 
-def sevenStar():  # needs to access all relavent unit links
+def sevenStar():  # needs to access all relevant unit links
     source: bytes = rq.get(
         "https://allstartd.fandom.com/wiki/7_Star_Units").content
     soup = bs(source, 'html5lib')
@@ -34,7 +35,7 @@ def sevenStar():  # needs to access all relavent unit links
             links.append(href.get('href'))
 
 
-def newUnits():  # needs to access all relavent unit links
+def newUnits():  # needs to access all relevant unit links
     source: bytes = rq.get(
         "https://allstartd.fandom.com/wiki/New_Units").content
     soup = bs(source, 'html5lib')
@@ -43,8 +44,13 @@ def newUnits():  # needs to access all relavent unit links
             links.append(href.get('href'))
 
 
-def setLinks():  # compile links into set from list -- removing dups
-    return updateList(sorted(set(links), key=str.lower))
+def myfunc(b):  # adds the pre literal to the rest of the URL taken from previous functions(). proly use a lmbda func instead
+    return pre + b
+
+
+def setLinks():  # compile links into set from list -- removing dupes
+    x = map(myfunc, links)
+    return updateList(sorted(set(x), key=str.lower))
 
 
 def updateList(newSet):  # create/overwrite unitlist.txt
@@ -61,7 +67,8 @@ def main() -> None:  # intended to be ran, no return value
 
 
 main()
-# print(f"\nset links total: {len(links)}\n data type of : {type(links)}\n")  # check new set against old list
+print(f"\nset links total: {len(links)}\n data type of : {
+      type(links)}\n")  # check new set against old list
 
 
 # print(sorted(links, key=str.lower))  # sort set by alph-lowercase
