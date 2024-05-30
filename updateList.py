@@ -1,3 +1,4 @@
+import re
 import time
 from bs4 import BeautifulSoup as bs
 import requests as rq
@@ -56,6 +57,42 @@ def setLinks():  # compile links into set from list -- removing dupes
 def updateList(newSet):  # create/overwrite unitlist.txt
     with open('unitList.txt', 'w') as l:
         l.write(f'{newSet}')
+        preFormat()
+
+
+# re-format list into usable strings -- rid of the '['at the beginning and end ']' along with any white space - commas are replaced with \n
+def preFormat():
+    with open('unitList.txt', 'r') as f:
+        g = f.read()
+        g = re.sub(r'[\[\] ]', '', g)
+        g = re.sub(r'(\',\')', '\n', g)
+        g = re.sub(r'[\']', '', g)
+    with open('unitList.txt', 'w') as h:
+        h.write(g)
+
+
+def blacklist():
+    # really sheit way of removing links I dont know how to handle yet
+    with open('unitList.txt', 'r') as u:
+        remove = u.read()
+        remove = re.sub(
+            r'(https://allstartd\.fandom\.com/wiki/Android_18_\(D\)\n)', '', remove)
+        remove = re.sub(
+            r'(https://allstartd\.fandom\.com/wiki/Ant_King_\(Serious\)\n)', '', remove)
+        remove = re.sub(
+            r'(https://allstartd\.fandom\.com/wiki/Wish\n)', '', remove)
+        remove = re.sub(
+            r'(https://allstartd\.fandom\.com/wiki/Path_\(Furious\)\n)', '', remove)
+        remove = re.sub(
+            r'(https://allstartd\.fandom\.com/wiki/Re_One-I\n)', '', remove)
+        remove = re.sub(
+            r'(https://allstartd\.fandom\.com/wiki/Octo_The_Greedy\n)', '', remove)
+        remove = re.sub(
+            r'(https://allstartd\.fandom\.com/wiki/Jeff_\(CEO\)\n)', '', remove)
+        remove = re.sub(
+            r'(https://allstartd\.fandom\.com/wiki/Demon_Of_Emotion\n)', '', remove)
+    with open('unitList.txt', 'w') as u2:
+        u2.write(remove)
 
 
 def main() -> None:  # intended to be ran, no return value
@@ -64,11 +101,11 @@ def main() -> None:  # intended to be ran, no return value
     sevenStar()
     newUnits()
     setLinks()
+    blacklist()
 
 
 main()
-print(f"\nset links total: {len(links)}\n data type of : {
-      type(links)}\n")  # check new set against old list
+# print(f"\nset links total: {len(links)}\n data type of : {type(links)}\n")  # check new set against old list
 
 
 # print(sorted(links, key=str.lower))  # sort set by alph-lowercase

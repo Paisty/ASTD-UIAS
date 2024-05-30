@@ -21,8 +21,15 @@ Alternatively using https://pypi.org/:
 1. Follow steps 1(recommended) and 2
 2. Install beautifulsoup4, requests, and html5lib
 
+Quick Tips
+====
+After running ASTD-UIAS.py, be sure to check each .csv file's length. Each file should be the exact same length. This is done to ensure character stats line up with each other.
 
-Need Help?
+updateList.py should be ran every time the WIKI gets updated, not ASTD. The data gathered is from the wiki, not the game itself. 
+
+A list is provided if you do not wish to generate one yourself. Be aware, this list will not be updated, its only provided for accessibility.
+
+Still Need Help?
 ====
 When reporting an issue put the version number before the issue title! Such as [0.05]This software is broken! Also, please provide as much information as possible when reporting issues!
 

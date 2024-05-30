@@ -4,29 +4,20 @@ import requests as rq
 import re
 
 
-
-# MUST run unitList() along with respective scrubs IF there are any changes to list.txt
-# List MUST be sorted before hand. Sorting it in-code breaks(idk, always breaks at the end)
-
-
-
 start = time.time()  # stopwatch
 
 
-# read file and convert it to a list
-read = open('Links.txt', 'r', encoding='utf-8')
-listof = list(read)
-read.close()
-readlist = [url.rstrip('\n') for url in listof]
+with open('unitList.txt', 'r') as links:  # read file
+    readLinks = [url.strip('\n') for url in links]
 
 
-def unitList(read=readlist):  # using as Main
-    # wipe files
-    unitWipe()
-    # unitList runs list through BS
-    for unitlist in read:
-        unitpage = rq.get(unitlist).content
-        soup = BS(unitpage, 'lxml')
+def unitList(read=readLinks):  # using as Main
+
+    unitWipe()    # wipe files
+
+    for unitList in read:     # unitList runs list through BS
+        unitPage = rq.get(unitList).content
+        soup = BS(unitPage, 'lxml')
         unitTitle(soup)
         unitCost(soup)
         unitDamage(soup)
@@ -35,18 +26,19 @@ def unitList(read=readlist):  # using as Main
         unitTypeInit(soup)
         unitEnchantInit(soup)
 
-def unitStatusInit(_):
-    for _ in _.find_all('div', class_='page-header__categories'):
+
+def unitStatusInit(_):  # Init narrows search before searching begins
+    for _ in _.find_all(id='mw-customcollapsible-statsBoxMax'):
         unitStatus(_)
 
 
-def unitTypeInit(_):
-    for _ in _.find_all(attrs={'data-source' : 'tower_type'}):
+def unitTypeInit(_):  # Init narrows search before searching begins
+    for _ in _.find_all(attrs={'data-source': 'tower_type'}):
         unitType(_.text.rstrip('\n'))
 
 
-def unitEnchantInit(_):
-    for _ in _.find_all(attrs={'data-source' : 'enchant'}):
+def unitEnchantInit(_):  # Init narrows search before searching begins
+    for _ in _.find_all(attrs={'data-source': 'enchant'}):
         unitEnchant(_)
 
 
@@ -100,20 +92,20 @@ def unitSpaOrb(_):
 
 
 def unitStatus(_):
-    if re.search('Black Flame', str(_)):
+    if re.search(r'(black flame)|(Black Flame)', str(_)):
         unitSts('BF')
-    elif re.search('Bleed', str(_)):
+    elif re.search(r'(bleed)|(Bleed)', str(_)):
         unitSts('Bld')
-    elif re.search('Sunburn', str(_)):
+    elif re.search(r'(sunburn)|(SunBurn)', str(_)):
         unitSts('Sbrn')
-    elif re.search('Burn', str(_)):
+    elif re.search(r'(burn)|(Burn)', str(_)):
         unitSts('Brn')
-    elif re.search('Rupture', str(_)):
+    elif re.search(r'(rupture)|(Rupture)', str(_)):
         unitSts('Rup')
-    elif re.search('Poison', str(_)):
+    elif re.search(r'(poison)|(Poison)', str(_)):
         unitSts('Psn')
     else:
-        unitSts('')
+        unitSts('N/A')
 
 
 def unitType(_):
@@ -146,6 +138,7 @@ def unitEnchant(_):
         unitEnch('Nature')
     else:
         unitEnch('N/A')
+
 
 def scrubDamage(_):
     # scrub text; remove unwanted characters
@@ -208,6 +201,7 @@ def unitKey(file):
         f.write(f'\n{file}')
     with open('Enchant.csv', 'a') as f:
         f.write(f'\n{file}')
+
 
 def unitDValue(damage):
     with open('Damage.csv', 'a') as f:
@@ -278,10 +272,11 @@ def scrubCsvS():
 
 
 def scrubSts():
-    with open('Sts.csv', 'r') as S:
+    with open('Status.csv', 'r') as S:
         scrubS = S.read()
         scrubS = re.sub(r'\n', '', scrubS, count=1)
         scrubS = re.sub(r':', ',', scrubS)
+        scrubS = re.sub(r'(Card Collector, Ci)', 'Card Collector Ci', scrubS)
     with open('Sts.csv', 'w') as S:
         S.write(scrubS)
 
@@ -308,7 +303,6 @@ def scrubEnchant():
         S.write(scrubE)
 
 
-
 unitList()
 scrubCsvD()
 scrubCsvC()
@@ -316,6 +310,7 @@ scrubCsvS()
 scrubSts()
 scrubType()
 scrubEnchant()
+
 
 end = time.time()
 print(f'Time taken to run the code was {end-start} seconds')
