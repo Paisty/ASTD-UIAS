@@ -12,7 +12,7 @@ pre = 'https://allstartd.fandom.com'
 def fiveStar():  # needs to access all relevant unit links
     source: bytes = rq.get(
         "https://allstartd.fandom.com/wiki/5_Star_Units").content
-    soup = bs(source, 'html5lib')
+    soup = bs(source, 'lxml')
     for url in soup.find_all('div', class_='ChBox_item_contet_container'):
         for href in url.find_all('a'):
             links.append(href.get('href'))
@@ -21,7 +21,7 @@ def fiveStar():  # needs to access all relevant unit links
 def sixStar():  # needs to access all relevant unit links
     source: bytes = rq.get(
         "https://allstartd.fandom.com/wiki/6_Star_Units").content
-    soup = bs(source, 'html5lib')
+    soup = bs(source, 'lxml')
     for url in soup.find_all('div', class_='ChBox_item_contet_container'):
         for href in url.find_all('a'):
             links.append(href.get('href'))
@@ -30,7 +30,7 @@ def sixStar():  # needs to access all relevant unit links
 def sevenStar():  # needs to access all relevant unit links
     source: bytes = rq.get(
         "https://allstartd.fandom.com/wiki/7_Star_Units").content
-    soup = bs(source, 'html5lib')
+    soup = bs(source, 'lxml')
     for url in soup.find_all('div', class_='ChBox_item_contet_container'):
         for href in url.find_all('a'):
             links.append(href.get('href'))
@@ -39,7 +39,7 @@ def sevenStar():  # needs to access all relevant unit links
 def newUnits():  # needs to access all relevant unit links
     source: bytes = rq.get(
         "https://allstartd.fandom.com/wiki/New_Units").content
-    soup = bs(source, 'html5lib')
+    soup = bs(source, 'lxml')
     for url in soup.find_all('div', class_='ChBox_item_contet_container'):
         for href in url.find_all('a'):
             links.append(href.get('href'))
@@ -91,6 +91,8 @@ def blacklist():
             r'(https://allstartd\.fandom\.com/wiki/Jeff_\(CEO\)\n)', '', remove)
         remove = re.sub(
             r'(https://allstartd\.fandom\.com/wiki/Demon_Of_Emotion\n)', '', remove)
+        remove = re.sub(
+            r'(https://allstartd\.fandom\.com/wiki/The_Path_\(Final\)\n)', '', remove)
     with open('unitList.txt', 'w') as u2:
         u2.write(remove)
 

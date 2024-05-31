@@ -178,7 +178,7 @@ def unitWipe():
     print('', file=open('Damage.csv', 'w'), end='')
     print('', file=open('Cost.csv', 'w'), end='')
     print('', file=open('SPA.csv', 'w'), end='')
-    print('', file=open('Sts.csv', 'w'), end='')
+    print('', file=open('Status.csv', 'w'), end='')
     print('', file=open('Type.csv', 'w'), end='')
     print('', file=open('Enchant.csv', 'w'), end='')
 
@@ -197,7 +197,7 @@ def unitKey(file):
         f.write(f'\n{file}')
     with open('SPA.csv', 'a') as f:
         f.write(f'\n{file}')
-    with open('Sts.csv', 'a') as f:
+    with open('Status.csv', 'a') as f:
         f.write(f'\n{file}')
     with open('Enchant.csv', 'a') as f:
         f.write(f'\n{file}')
@@ -224,7 +224,7 @@ def unitSValueOrb(_):
 
 
 def unitSts(_):
-    with open('Sts.csv', 'a') as f:
+    with open('Status.csv', 'a') as f:
         f.write(f'{_},')
 
 
@@ -277,7 +277,8 @@ def scrubSts():
         scrubS = re.sub(r'\n', '', scrubS, count=1)
         scrubS = re.sub(r':', ',', scrubS)
         scrubS = re.sub(r'(Card Collector, Ci)', 'Card Collector Ci', scrubS)
-    with open('Sts.csv', 'w') as S:
+        scrubS = re.sub(r'(N/A,\n)', '\n', scrubS)
+    with open('Status.csv', 'w') as S:
         S.write(scrubS)
 
 
